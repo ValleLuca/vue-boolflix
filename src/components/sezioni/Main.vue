@@ -2,13 +2,16 @@
   <section class="container">
     <div class="d-flex justify-content-center">
       <div class="p-4">
-        <input type="text" placeholder="Cerca qui" v-model="inputRicercaUtente" @keyup="ricerca">
-        <button>Ricerca</button>
+        <input type="text" placeholder="Cerca qui" v-model="inputRicercaUtente" @keyup="RicercaApi">  <!--  -->
       </div>
     </div>
-    <div class="row">
-      <div class="col">
+    <div class="row row-cols-5">
+      <div class="col border text-center" v-for="(element, index) in filmArray" :key="index">
         <!-- caselle -->
+          <h5>{{ element.title }}</h5>
+          <h6>{{ element.original_title }}</h6>
+          <p>{{ element.original_language }}</p>
+          <p>{{ element.vote_average }}</p>
       </div>
     </div>
   </section>
@@ -22,6 +25,7 @@ export default {
   data() {
     return {
       filmArray: [],
+      inputRicercaUtente: ""
     }
   },
   created() {
@@ -29,15 +33,16 @@ export default {
   },
   methods: {
     RicercaApi: function() {
-      axios.get("https://api.themoviedb.org/3/movie", {
-      params: {
-        api_key: '87fc6a59479bfaf6ae9b13c70ef1655e',
-        query: 'fast'
-      }
+      axios.get("https://api.themoviedb.org/3/search/movie", 
+      {
+        params: {
+          api_key: '87fc6a59479bfaf6ae9b13c70ef1655e',
+          query: this.inputRicercaUtente
+        }
       })
       .then( (dato) => {
-        this.filmArray = dato.api_key.query;
-        console.log(dato.data);
+        this.filmArray = dato.data.results;
+        console.log(this.filmArray);
 
       })
       .catch(function (error) {
