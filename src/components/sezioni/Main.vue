@@ -1,25 +1,24 @@
 <template>
   <section class="container">
     <div class="d-flex justify-content-center">
-      <div class="p-4">
-        <input type="text" placeholder="Cerca qui" v-model="inputRicercaUtente" @keyup="RicercaApi">
+      <div class="p-4 d-flex flex-column align-items-center">
+        <input type="text" class="text-center" placeholder="Cerca qui" v-model="inputRicercaUtente" @keyup="RicercaApi">
+        <!-- selezione lingua -->
         <div>
           <select name="lingua" @change="selezioneLingua">
-              <option value="">Scegli il genere</option>
-              <option value="it-IT"><img src="../img/it.png"></option>
+              <option value="it-IT">Italiano</option>
               <option value="en-US">Inglese</option>
               <option value="es-ES">Spagnolo</option>
-              <option value="ie-IE">Altre</option>
           </select>
         </div>
       </div>
     </div>
     <div class="row row-cols-5">
-      <div class="col border text-center" v-for="(element, index) in filmArray" :key="index">
+      <div class="col border d-flex flex-column justify-content-center text-center" v-for="(element, index) in filmArray" :key="index">
         <!-- caselle -->
           <h5>{{ element.title }}</h5>
           <h6>{{ element.original_title }}</h6>
-          <p>{{ element.original_language }}</p>
+          <img class="img-fluid" :src="getFlag( element.original_language )">
           <p>{{ element.vote_average }}</p>
       </div>
     </div>
@@ -42,6 +41,13 @@ export default {
     this.RicercaApi();
   },
   methods: {
+    getFlag( language )
+    {
+      if(language == "en"){
+        language = "gb"
+      }
+      return 'https://countryflagsapi.com/png/' + language
+    },
     RicercaApi: function() {
       axios.get("https://api.themoviedb.org/3/search/movie", 
       {
@@ -61,9 +67,11 @@ export default {
         // always executed
       });
     },
-    selezioneLingua(e) {
+    selezioneLingua(e) 
+    {
       this.linguaSelezionata = e.target.value;
       console.log(this.linguaSelezionata);
+      this.RicercaApi()
     }
     
   }
