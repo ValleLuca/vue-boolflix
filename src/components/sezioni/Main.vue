@@ -2,7 +2,16 @@
   <section class="container">
     <div class="d-flex justify-content-center">
       <div class="p-4">
-        <input type="text" placeholder="Cerca qui" v-model="inputRicercaUtente" @keyup="RicercaApi">  <!--  -->
+        <input type="text" placeholder="Cerca qui" v-model="inputRicercaUtente" @keyup="RicercaApi">
+        <div>
+          <select name="lingua" @change="selezioneLingua">
+              <option value="">Scegli il genere</option>
+              <option value="it-IT"><img src="../img/it.png"></option>
+              <option value="en-US">Inglese</option>
+              <option value="es-ES">Spagnolo</option>
+              <option value="ie-IE">Altre</option>
+          </select>
+        </div>
       </div>
     </div>
     <div class="row row-cols-5">
@@ -25,7 +34,8 @@ export default {
   data() {
     return {
       filmArray: [],
-      inputRicercaUtente: ""
+      inputRicercaUtente: "",
+      linguaSelezionata: ""
     }
   },
   created() {
@@ -37,13 +47,12 @@ export default {
       {
         params: {
           api_key: '87fc6a59479bfaf6ae9b13c70ef1655e',
+          language: this.linguaSelezionata,
           query: this.inputRicercaUtente
         }
       })
       .then( (dato) => {
         this.filmArray = dato.data.results;
-        console.log(this.filmArray);
-
       })
       .catch(function (error) {
         console.log(error);
@@ -51,6 +60,10 @@ export default {
       .then(function () {
         // always executed
       });
+    },
+    selezioneLingua(e) {
+      this.linguaSelezionata = e.target.value;
+      console.log(this.linguaSelezionata);
     }
     
   }
