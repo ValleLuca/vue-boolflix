@@ -53,7 +53,7 @@ export default {
               titolo_originale: elem.original_title,
               lingua: elem.original_language,
               voto: elem.vote_average,
-              immagine: elem.poster_path
+              immagine: elem.poster_path,
             };
             arrayObjMod.push(objApp);
           });
@@ -67,8 +67,7 @@ export default {
           titolo_originale: elem.original_name,
           lingua: elem.original_language,
           voto: elem.vote_average,
-          immagine: elem.poster_path
-
+          immagine: elem.poster_path,
         };
         arrayObjMod.push(objApp);
       });
@@ -134,10 +133,15 @@ export default {
       this.linguaSelezionata = e.target.value;
       console.log(this.linguaSelezionata);
       this.RicercaApiFilm();
+    },
+    modificaVoto () {
+      this.arrayFilmAdattata.forEach((elem) => {
+      console.log(elem[0].voto);
+      });
     }
   }
 }
-
+//Math.ceil ciò che ci serve
 </script>
 
 <style scoped lang="scss">
