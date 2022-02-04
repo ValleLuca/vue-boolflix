@@ -18,6 +18,7 @@
         <!-- caselle -->
           <h5>{{ element.titolo }}</h5>
           <h6>{{ element.titolo_originale }}</h6>
+          <img class="img-fluid" :src="'https://image.tmdb.org/t/p/w500/' + element.immagine">
           <img class="img-fluid" :src="getFlag( element.lingua )">
           <p>{{ element.voto }}</p>
       </div>
@@ -51,7 +52,8 @@ export default {
               titolo: elem.title,
               titolo_originale: elem.original_title,
               lingua: elem.original_language,
-              voto: elem.vote_average
+              voto: elem.vote_average,
+              immagine: elem.poster_path
             };
             arrayObjMod.push(objApp);
           });
@@ -64,7 +66,9 @@ export default {
           titolo: elem.name,
           titolo_originale: elem.original_name,
           lingua: elem.original_language,
-          voto: elem.vote_average
+          voto: elem.vote_average,
+          immagine: elem.poster_path
+
         };
         arrayObjMod.push(objApp);
       });
@@ -129,8 +133,8 @@ export default {
     {
       this.linguaSelezionata = e.target.value;
       console.log(this.linguaSelezionata);
-      this.RicercaApi()
-    },
+      this.RicercaApiFilm();
+    }
   }
 }
 
