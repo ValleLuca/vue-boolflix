@@ -2,7 +2,7 @@
   <section class="container">
     <div class="d-flex justify-content-center">
       <div class="p-4 d-flex flex-column align-items-center">
-        <input type="text" class="text-center" placeholder="Cerca qui" v-model="inputRicercaUtente" @keyup="RicercaApi">
+        <input type="text" class="text-center" placeholder="Cerca qui" v-model="inputRicercaUtente" @keyup="RicercaApiFilm"> 
         <!-- selezione lingua -->
         <div>
           <select name="lingua" @change="selezioneLingua">
@@ -14,12 +14,12 @@
       </div>
     </div>
     <div class="row row-cols-5">
-      <div class="col border d-flex flex-column justify-content-center text-center" v-for="(element, index) in filmArray" :key="index">
+      <div class="col border d-flex flex-column justify-content-center text-center" v-for="(element, index) in arrayTotale" :key="index">
         <!-- caselle -->
-          <h5>{{ element.title }}</h5>
-          <h6>{{ element.original_title }}</h6>
-          <img class="img-fluid" :src="getFlag( element.original_language )">
-          <p>{{ element.vote_average }}</p>
+          <h5>{{ element.titolo }}</h5>
+          <h6>{{ element.titolo_originale }}</h6>
+          <img class="img-fluid" :src="getFlag( element.lingua )">
+          <p>{{ element.voto }}</p>
       </div>
     </div>
   </section>
@@ -33,12 +33,47 @@ export default {
   data() {
     return {
       filmArray: [],
+      serieArray: [],
       inputRicercaUtente: "",
-      linguaSelezionata: ""
+      linguaSelezionata: "",
+      cambiOggetto: "",
     }
   },
   created() {
-    this.RicercaApi();
+    this.RicercaApiFilm();
+    this.RicercaApiSerie();
+  },
+  computed: {
+    arrayFilmAdattata(){
+          const arrayObjMod = [];
+          this.filmArray.forEach((elem) => {
+            const objApp = {
+              titolo: elem.title,
+              titolo_originale: elem.original_title,
+              lingua: elem.original_language,
+              voto: elem.vote_average
+            };
+            arrayObjMod.push(objApp);
+          });
+          return arrayObjMod;
+        },
+    arraySerieAdattata(){
+      const arrayObjMod = [];
+      this.serieArray.forEach((elem) => {
+        const objApp = {
+          titolo: elem.name,
+          titolo_originale: elem.original_name,
+          lingua: elem.original_language,
+          voto: elem.vote_average
+        };
+        arrayObjMod.push(objApp);
+      });
+      return arrayObjMod;
+    },
+    arrayTotale() {
+      return [...this.arrayFilmAdattata, ...this.arraySerieAdattata];
+    }
+     
   },
   methods: {
     getFlag( language )
@@ -46,9 +81,12 @@ export default {
       if(language == "en"){
         language = "gb"
       }
+      if (language == "ja") {
+        language = "jp"
+      }
       return 'https://countryflagsapi.com/png/' + language
     },
-    RicercaApi: function() {
+    RicercaApiFilm: function() {
       axios.get("https://api.themoviedb.org/3/search/movie", 
       {
         params: {
@@ -59,6 +97,26 @@ export default {
       })
       .then( (dato) => {
         this.filmArray = dato.data.results;
+        this.RicercaApiSerie();
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+      .then(function () {
+        // always executed
+      });
+    },
+    RicercaApiSerie: function() {
+      axios.get("https://api.themoviedb.org/3/search/tv", 
+      {
+        params: {
+          api_key: '87fc6a59479bfaf6ae9b13c70ef1655e',
+          language: this.linguaSelezionata,
+          query: this.inputRicercaUtente
+        }
+      })
+      .then( (dato) => {
+        this.serieArray = dato.data.results;
       })
       .catch(function (error) {
         console.log(error);
@@ -72,8 +130,7 @@ export default {
       this.linguaSelezionata = e.target.value;
       console.log(this.linguaSelezionata);
       this.RicercaApi()
-    }
-    
+    },
   }
 }
 
