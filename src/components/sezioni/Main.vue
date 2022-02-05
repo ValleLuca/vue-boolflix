@@ -16,12 +16,27 @@
     <div class="row row-cols-5">
       <div class="col border d-flex flex-column justify-content-center text-center" v-for="(element, index) in arrayTotale" :key="index">
         <!-- caselle -->
+        <div>
           <h5>{{ element.titolo }}</h5>
           <h6>{{ element.titolo_originale }}</h6>
           <img class="img-fluid" :src="'https://image.tmdb.org/t/p/w500/' + element.immagine">
           <img class="img-fluid" :src="getFlag( element.lingua )">
-          <p>{{ element.voto }}</p>
+          <div class="d-flex justify-content-center">
+            <div v-for="(dVoto, i) in arrayTotale" :key="i">
+              <div v-if="i <= 4">
+                <div v-if="element.voto > i">
+                  <i class="fas fa-star"></i>
+                </div>
+                <div v-else>
+                  <i class="far fa-star"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
+      
     </div>
   </section>
 </template>
@@ -37,7 +52,6 @@ export default {
       serieArray: [],
       inputRicercaUtente: "",
       linguaSelezionata: "",
-      cambiOggetto: "",
     }
   },
   created() {
@@ -87,6 +101,22 @@ export default {
       if (language == "ja") {
         language = "jp"
       }
+      if(language == "hi")
+      {
+        language = "in"
+      }
+      if(language == "el")
+      {
+        language = "gr"
+      }
+      if(language == "da")
+      {
+        language = "dk"
+      }
+      if(language == "ko")
+      {
+        language = "kr"
+      }
       return 'https://countryflagsapi.com/png/' + language
     },
     RicercaApiFilm: function() {
@@ -101,6 +131,7 @@ export default {
       .then( (dato) => {
         this.filmArray = dato.data.results;
         this.RicercaApiSerie();
+        this.modificaVotoFilm();
       })
       .catch(function (error) {
         console.log(error);
@@ -120,6 +151,7 @@ export default {
       })
       .then( (dato) => {
         this.serieArray = dato.data.results;
+        this.modificaVotoSerie();
       })
       .catch(function (error) {
         console.log(error);
@@ -134,9 +166,18 @@ export default {
       console.log(this.linguaSelezionata);
       this.RicercaApiFilm();
     },
-    modificaVoto () {
-      this.arrayFilmAdattata.forEach((elem) => {
-      console.log(elem[0].voto);
+    modificaVotoFilm () {
+      this.arrayFilmAdattata.forEach((elem, i) => {
+      let divisione = (elem.voto / 2);
+      let stelle = (Math.ceil(divisione));
+      this.arrayFilmAdattata[i].voto = stelle;
+      });
+    },
+    modificaVotoSerie () {
+      this.arraySerieAdattata.forEach((elem, i) => {
+      let divisione = (elem.voto / 2);
+      let stelle = (Math.ceil(divisione));
+      this.arraySerieAdattata[i].voto = stelle;
       });
     }
   }
