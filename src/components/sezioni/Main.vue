@@ -1,20 +1,7 @@
 <template>
   <section class="container">
-    <div class="d-flex justify-content-center">
-      <div class="p-4 d-flex flex-column align-items-center">
-        <input type="text" class="text-center" placeholder="Cerca qui" v-model="inputRicercaUtente" @keyup="RicercaApiFilm"> 
-        <!-- selezione lingua -->
-        <div>
-          <select name="lingua" @change="selezioneLingua">
-              <option value="it-IT">Italiano</option>
-              <option value="en-US">Inglese</option>
-              <option value="es-ES">Spagnolo</option>
-          </select>
-        </div>
-      </div>
-    </div>
     <div class="row row-cols-5">
-      <div class="col border d-flex flex-column justify-content-center text-center" v-for="(element, index) in arrayTotale" :key="index">
+      <div class="col border d-flex flex-column justify-content-center text-center" v-for="(element, index) in ArTot" :key="index">
         <!-- caselle -->
         <div>
           <h5>{{ element.titolo }}</h5>
@@ -22,7 +9,7 @@
           <img class="img-fluid" :src="'https://image.tmdb.org/t/p/w500/' + element.immagine">
           <img class="img-fluid" :src="getFlag( element.lingua )">
           <div class="d-flex justify-content-center">
-            <div v-for="(dVoto, i) in arrayTotale" :key="i">
+            <div v-for="(dVoto, i) in ArTot" :key="i">
               <div v-if="i <= 4">
                 <div v-if="element.voto > i">
                   <i class="fas fa-star"></i>
@@ -42,11 +29,63 @@
 </template>
 
 <script>
-import axios from 'axios'
+
 
 export default {
   name: 'Main',
-  data() {
+  props: {
+    ArTot: Array
+  },
+  methods: {
+    getFlag( language )
+    {
+      if(language == "en"){
+        language = "gb"
+      }
+      if (language == "ja") {
+        language = "jp"
+      }
+      if(language == "hi")
+      {
+        language = "in"
+      }
+      if(language == "el")
+      {
+        language = "gr"
+      }
+      if(language == "da")
+      {
+        language = "dk"
+      }
+      if(language == "ko")
+      {
+        language = "kr"
+      }
+      return 'https://countryflagsapi.com/png/' + language
+    },
+  }
+
+}
+//Math.ceil ciò che ci serve 
+</script>
+
+<style scoped lang="scss">
+
+</style>
+
+<!-- <div class="d-flex justify-content-center">
+      <div class="p-4 d-flex flex-column align-items-center">
+        <input type="text" class="text-center" placeholder="Cerca qui" v-model="inputRicercaUtente" @keyup="RicercaApiFilm"> 
+        <div>
+          <select name="lingua" @change="selezioneLingua">
+              <option value="it-IT">Italiano</option>
+              <option value="en-US">Inglese</option>
+              <option value="es-ES">Spagnolo</option>
+          </select>
+        </div>
+      </div>
+    </div>  
+data() {
     return {
       filmArray: [],
       serieArray: [],
@@ -180,11 +219,4 @@ export default {
       this.arraySerieAdattata[i].voto = stelle;
       });
     }
-  }
-}
-//Math.ceil ciò che ci serve
-</script>
-
-<style scoped lang="scss">
-
-</style>
+  } -->
