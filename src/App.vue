@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Header @ricerca="ricercaCompletata"/>
+    <Header @ricerca="ricercaCompletata" @selezione="selezioneLingua"/>
     <Main :ArTot="arrayTotale"/>
   </div>
 </template>
@@ -111,12 +111,12 @@ export default {
         // always executed
       });
     },
-   /* selezioneLingua(e) 
+    selezioneLingua(lingua) 
     {
-      this.linguaSelezionata = e.target.value;
+      this.linguaSelezionata = lingua;
       console.log(this.linguaSelezionata);
       this.RicercaApiFilm();
-    }, */
+    },
     modificaVotoFilm () {
       this.arrayFilmAdattata.forEach((elem, i) => {
       let divisione = (elem.voto / 2);

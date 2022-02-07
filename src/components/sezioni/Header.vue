@@ -9,13 +9,13 @@
         <div class="p-4 d-flex flex-column align-items-center">
           <input type="text" class="text-center" placeholder="Cerca qui" v-model="inputRicercaUtente" @keyup="$emit('ricerca', inputRicercaUtente)"> 
           <!-- selezione lingua -->
-          <!--<div>
-            <select name="lingua" @change="$emit('ricerca', inputRicercaUtente)">
+          <div>
+            <select name="lingua" v-model="selectlingua" @change="$emit('selezione', selectlingua)">
                 <option value="it-IT">Italiano</option>
                 <option value="en-US">Inglese</option>
                 <option value="es-ES">Spagnolo</option>
             </select>
-          </div> -->
+          </div>
         </div>
       </div>
 
@@ -28,7 +28,8 @@ export default {
   name: 'Header',
   data() {
     return {
-      inputRicercaUtente: ""
+      inputRicercaUtente: "",
+      selectlingua: ""
     };
   }
 }
