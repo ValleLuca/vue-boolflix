@@ -1,15 +1,15 @@
 <template>
   <div>
-    <div class="d-flex bg-black align-items-center flex-column">
+    <div class="d-flex bg-black justify-content-center">
       <div class="p-4">
         <h2 class="text-danger">BOOLFLIX</h2>  
       </div>
 
       <div class="d-flex justify-content-center">
-        <div class="p-4 d-flex flex-column align-items-center">
+        <div class="p-4 d-flex align-items-center">
           <input type="text" class="text-center" placeholder="Cerca qui" v-model="inputRicercaUtente" @keyup="$emit('ricerca', inputRicercaUtente)"> 
           <!-- selezione lingua -->
-          <div>
+          <div class="ps-4">
             <select name="lingua" v-model="selectlingua" @change="$emit('selezione', selectlingua)">
                 <option value="it-IT">Italiano</option>
                 <option value="en-US">Inglese</option>
